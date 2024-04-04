@@ -53,10 +53,15 @@ Resources:
 #        - AmazonDynamoDBFullAccess
 #      Architectures:
 #        - x86_64
+
+  primaryKey:
+    Name: id
+    Type: String
+
   MyTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      PrimaryKey: id
+      PrimaryKey: !Ref primaryKey
       TableName: mimic
 
 
