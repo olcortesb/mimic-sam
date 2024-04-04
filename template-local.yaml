@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: k6-utils
+
+# # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Parameters:
+  DynamoUseLocal:
+    Type: String
+    Default: "false"
+    Description: For local development
+  MimicTable:
+    Type: String
+    Default: mimic
+    Description: LoginTicket table name
+  Env:
+    Type: String
+    AllowedValues:
+      - dev
+      - stagin
+      - prod
+    Default: dev
+    Description: Environment in which the application will be deployed.
+
+Globals:
+  Function:
+    Runtime: nodejs18.x
+    Timeout: 40
+    MemorySize: 256
+    Environment:
+      Variables:
+        DYNAMO_DB_USE_LOCAL: true
+        DYNAMO_DB_REGION: us-west-2
+        DYNAMO_DB_END_POINT: http://172.18.0.15:8000
+        MIMIC_TABLE: mimic
+
+Resources:
+  kSixApi:
+    Type: 'AWS::Serverless::Api'
+    Properties:
+      StageName: !Ref Env
+#      Auth:
+#        DefaultAuthorizer: JWTCustomAuthorizer
+#        Authorizers:
+#          JWTCustomAuthorizer:
+#            FunctionPayloadType: TOKEN
+#            FunctionArn: !GetAtt JWTAuthFunction.Arn
+
+#  JWTAuthFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: src/
+#      Handler: jwt-auth.lambdaHandler
+#      Runtime: nodejs18.x
+#      Policies:
+#        - AmazonDynamoDBFullAccess
+#      Architectures:
+#        - x86_64
+
+  ListensFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ../src/
+      Handler: mimicListens.lambdaHandler
+      Runtime: nodejs18.x
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        SecondPhone:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            RestApiId: !Ref kSixApi
+            Path: /mimic
+            Method: post
+
+  ResponseFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: ../src/
+      Handler: mimicResponse.lambdaHandler
+      Runtime: nodejs18.x
+      Policies:
+        - AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        SecondPhone:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            RestApiId: !Ref kSixApi
+            Path: /mimic/{id}
+            Method: get
