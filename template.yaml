@@ -54,14 +54,12 @@ Resources:
 #      Architectures:
 #        - x86_64
 
-  primaryKey:
-    Name: id
-    Type: String
-
   MyTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      PrimaryKey: !GetAtt primaryKey.Name
+      PrimaryKey:
+        Name: id
+        Type: String
       TableName: mimic
 
 
