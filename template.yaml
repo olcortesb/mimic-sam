@@ -61,7 +61,7 @@ Resources:
   MyTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      PrimaryKey: !Ref primaryKey
+      PrimaryKey: !Ref primaryKey.name
       TableName: mimic
 
 
