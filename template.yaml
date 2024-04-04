@@ -28,7 +28,7 @@ Globals:
     Environment:
       Variables:
         DYNAMO_DB_USE_LOCAL: false
-        DYNAMO_DB_REGION: us-west-2
+        DYNAMO_DB_REGION: eu-central-1
         MIMIC_TABLE: mimic
 
 Resources:
