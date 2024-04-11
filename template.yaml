@@ -32,7 +32,7 @@ Globals:
         MIMIC_TABLE: mimic-sam
 
 Resources:
-  SammimicApi:
+  samimicApi:
     Type: 'AWS::Serverless::Api'
     Properties:
       StageName: !Ref Env
@@ -77,7 +77,7 @@ Resources:
         SecondPhone:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            RestApiId: !Ref mimicApi
+            RestApiId: !Ref samimicApi
             Path: /mimic
             Method: post
 
@@ -95,11 +95,11 @@ Resources:
         SecondPhone:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            RestApiId: !Ref mimicApi
+            RestApiId: !Ref samimicApi
             Path: /mimic/{id}
             Method: get
 
 Outputs:
   ProdDataEndpoint:
     Description: "API Prod stage endpoint"
-    Value: !Sub "https://${mimicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Value: !Sub "https://${samimicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
