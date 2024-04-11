@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: aws-summit-madrid-2023
+Description: sam-stack-lambdas
 
 Parameters:
   DynamoUseLocal:
@@ -32,7 +32,7 @@ Globals:
         MIMIC_TABLE: mimic-sam
 
 Resources:
-  mimicApi:
+  SammimicApi:
     Type: 'AWS::Serverless::Api'
     Properties:
       StageName: !Ref Env
@@ -54,7 +54,7 @@ Resources:
 #      Architectures:
 #        - x86_64
 
-  MyTable:
+  SamTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
@@ -63,7 +63,7 @@ Resources:
       TableName: mimic-sam
 
 
-  ListensFunction:
+  SamListensFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: repository/src/
@@ -81,7 +81,7 @@ Resources:
             Path: /mimic
             Method: post
 
-  ResponseFunction:
+  SamResponseFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: repository/src/
