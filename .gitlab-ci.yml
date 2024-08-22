@@ -57,7 +57,7 @@ deploy-test:
     - npm install -g serverless
   script:
     - sls version
-    - sls deploy --stack sam-lab --region eu-central-1 --debug --stage dev
+    - sls deploy --stack sam-lab --region eu-central-1 --debug --stage dev --bucket SamCliSourceBucket
   only:
   - feat/test-sls-v4
 
