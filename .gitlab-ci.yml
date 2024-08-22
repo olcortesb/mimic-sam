@@ -49,16 +49,27 @@ npm-install:
       - repository
 
 deploy-test:
-  image: python:3.8
-  stage: deploy
+  image: node:18
   before_script:
-    - pip3 install awscli --upgrade
-    - pip3 install aws-sam-cli --upgrade
+    - apt-get update
+    - apt-get install -y build-essential
+    - npm install -g serverless
   script:
-    - > 
-      sam deploy --template-file template.yaml
-      --stack-name sam-lab
-      --region eu-central-1 
-      --resolve-s3
-      --capabilities CAPABILITY_IAM 
-      --no-fail-on-empty-changeset 
+    - sls version
+    - sls deploy --stage slsprod
+  only:
+  - feat/test-sls-v4
+
+  # image: python:3.8
+  # stage: deploy
+  # before_script:
+  #   - pip3 install awscli --upgrade
+  #   - pip3 install aws-sam-cli --upgrade
+  # script:
+  #   - > 
+  #     sam deploy --template-file template.yaml
+  #     --stack-name sam-lab
+  #     --region eu-central-1 
+  #     --resolve-s3
+  #     --capabilities CAPABILITY_IAM 
+  #     --no-fail-on-empty-changeset 
