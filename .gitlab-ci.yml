@@ -49,6 +49,7 @@ npm-install:
       - repository
 
 deploy-test:
+  stage: deploy
   image: node:18
   before_script:
     - apt-get update
