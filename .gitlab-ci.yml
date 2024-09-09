@@ -5,8 +5,8 @@ cache:
   - node_modules/
 
 stages:
-  - sync-with-github
-#  - git-clone-lambda-code
+#  - sync-with-github
+  - git-clone-lambda-code
   - npm-install
   - deploy
 
