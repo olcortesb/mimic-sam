@@ -6,11 +6,11 @@ Description: k6-utils
 Parameters:
   DynamoUseLocal:
     Type: String
-    Default: "false"
+    Default: "true"
     Description: For local development
   MimicTable:
     Type: String
-    Default: mimic
+    Default: mimic-sam
     Description: LoginTicket table name
   Env:
     Type: String
@@ -29,9 +29,9 @@ Globals:
     Environment:
       Variables:
         DYNAMO_DB_USE_LOCAL: true
-        DYNAMO_DB_REGION: us-west-2
-        DYNAMO_DB_END_POINT: http://172.18.0.15:8000
-        MIMIC_TABLE: mimic
+        DYNAMO_DB_REGION: us-east-1
+        DYNAMO_DB_END_POINT: https://localhost.localstack.cloud:4566
+        MIMIC_TABLE: mimic-sam
 
 Resources:
   kSixApi:
@@ -55,11 +55,18 @@ Resources:
 #        - AmazonDynamoDBFullAccess
 #      Architectures:
 #        - x86_64
+  SamTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: id
+        Type: String
+      TableName: mimic-sam
 
   ListensFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ../src/
+      CodeUri: /home/ackstorm/workspace/lambdas-src/src
       Handler: mimicListens.lambdaHandler
       Runtime: nodejs18.x
       Policies:
@@ -77,7 +84,7 @@ Resources:
   ResponseFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: ../src/
+      CodeUri: /home/ackstorm/workspace/lambdas-src/src
       Handler: mimicResponse.lambdaHandler
       Runtime: nodejs18.x
       Policies:
